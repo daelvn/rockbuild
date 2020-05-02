@@ -1,0 +1,27 @@
+package: rockbuild
+
+description:
+  summary: Program for compiling rockframes written in YAML to rockspecs.
+  detailed: >
+    daelvn/rockwriter stopped working for me, so
+    I ended up making this. It takes a YAML "rockframe",
+    and compiles it into a rockspec by providing a version.
+    It can also test the rock or upload it for you!
+  license:  Unlicense
+  homepage: https://github.com/daelvn/rockbuild
+  labels: [luarocks, yaml]
+
+dependencies:
+  - lyaml
+  - serpent
+  - ansikit
+  - filekit >= 1.3
+  - argparse
+
+source:
+  url: git://github.com/daelvn/rockbuild.git
+
+build:
+  install:
+    bin:
+      rockbuild: rockbuild.lua
