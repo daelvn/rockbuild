@@ -10,6 +10,7 @@ end
 local style
 style = require("ansikit.style").style
 local argparse = require("argparse")
+local VERSION = "1.1"
 local args = { }
 do
   local _with_0 = argparse()
@@ -43,6 +44,13 @@ do
   _with_0:option("-r --revision", "custom revision for the rockspec")
   _with_0:flag("-m --make", "runs 'luarocks make' after compiling the rockspec")
   _with_0:flag("-t --tag", "Adds a git tag after compiling the rockspec")
+  do
+    local _with_1 = _with_0:flag("-v --version", "Shows the current version")
+    _with_1:action(function()
+      print(VERSION)
+      return os.exit()
+    end)
+  end
   _with_0:command("upload u", "uploads the rockspec after compile")
   args = _with_0:parse()
 end
@@ -93,7 +101,7 @@ torockspec = function(txt)
   return fin
 end
 local version = args.version
-print(style("%{blue bold}rockbuild 1.0"))
+print(style("%{blue bold}rockbuild " .. tostring(VERSION)))
 prefix("Using version %{green}'" .. tostring(version) .. "'")
 prefix("Loading %{yellow}" .. tostring(args.file))
 local frame = load(readfile(args.file))
@@ -139,6 +147,7 @@ if args.tag then
   os.execute("git add -A")
   os.execute("git commit -m 'Producing rockspec " .. tostring(verrev) .. "'")
   os.execute("git tag -a " .. tostring(args.prefix) .. tostring(version) .. tostring(args.suffix))
+  os.execute("git push --tags")
 end
 if args.make then
   prefix("Running 'luarocks make'")

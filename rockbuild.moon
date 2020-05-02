@@ -7,6 +7,8 @@ import exists, makeDir, glob, iglob from require "filekit"
 import style                        from require "ansikit.style"
 argparse                               = require "argparse"
 
+VERSION = "1.1"
+
 args = {}
 with argparse!
   \name        "rockbuild"
@@ -32,6 +34,10 @@ with argparse!
   \option "-r --revision", "custom revision for the rockspec"
   \flag   "-m --make",     "runs 'luarocks make' after compiling the rockspec"
   \flag   "-t --tag",      "Adds a git tag after compiling the rockspec"
+  with \flag   "-v --version",  "Shows the current version"
+    \action ->
+      print VERSION
+      os.exit!
 
   \command "upload u", "uploads the rockspec after compile"
 
@@ -75,7 +81,7 @@ torockspec = (txt) ->
 
 -- start
 version = args.version
-print style "%{blue bold}rockbuild 1.0"
+print style "%{blue bold}rockbuild #{VERSION}"
 prefix "Using version %{green}'#{version}'"
 
 -- load rockframe
@@ -131,6 +137,7 @@ if args.tag
   os.execute "git add -A"
   os.execute "git commit -m 'Producing rockspec #{verrev}'"
   os.execute "git tag -a #{args.prefix}#{version}#{args.suffix}"
+  os.execute "git push --tags"
 if args.make
   prefix "Running 'luarocks make'"
   os.execute "luarocks make"
