@@ -126,9 +126,6 @@ makeDir args.dir unless exists "#{args.dir}/"
 writefile path, torockspec result
 
 -- run post-compile things
-if args.delete
-  prefix "Deleting #{path}"
-  os.remove path
 if args.tag
   prefix "Making Git tag %{yellow}#{args.prefix}#{version}#{args.suffix}"
   os.execute "git add -A"
@@ -141,3 +138,6 @@ if args.upload
   prefix "Uploading rock %{yellow}#{path}"
   os.execute "luarocks upload #{path}"
   os.remove file for file in iglob "*.src.rock"
+if args.delete
+  prefix "Deleting #{path}"
+  os.remove path

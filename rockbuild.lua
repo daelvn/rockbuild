@@ -39,6 +39,7 @@ do
     _with_1:default("rockspecs")
   end
   _with_0:flag("--dry", "prints the resulting rockspec and does nothing else")
+  _with_0:flag("--delete", "deletes the rockspec after using it")
   _with_0:option("-r --revision", "custom revision for the rockspec")
   _with_0:flag("-m --make", "runs 'luarocks make' after compiling the rockspec")
   _with_0:flag("-t --tag", "Adds a git tag after compiling the rockspec")
@@ -149,4 +150,8 @@ if args.upload then
   for file in iglob("*.src.rock") do
     os.remove(file)
   end
+end
+if args.delete then
+  prefix("Deleting " .. tostring(path))
+  return os.remove(path)
 end
