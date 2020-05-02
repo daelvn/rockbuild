@@ -100,6 +100,20 @@ torockspec = function(txt)
   end
   return fin
 end
+local extractDeps
+extractDeps = function(dept)
+  local clone
+  do
+    local _tbl_0 = { }
+    for k, v in pairs(dept) do
+      _tbl_0[k] = v
+    end
+    clone = _tbl_0
+  end
+  clone.build = nil
+  clone.external = nil
+  return clone
+end
 local version = args.version
 print(style("%{blue bold}rockbuild " .. tostring(VERSION)))
 prefix("Using version %{green}'" .. tostring(version) .. "'")
@@ -115,7 +129,7 @@ local package = {
   version = verrev,
   description = frame.description,
   supported_platforms = frame.platforms,
-  dependencies = frame.dependencies,
+  dependencies = extractDeps(frame.dependencies),
   build_dependencies = frame.dependencies and frame.dependencies.build or nil,
   external_dependencies = frame.dependencies and frame.dependencies.external or nil,
   source = {

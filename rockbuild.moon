@@ -79,6 +79,13 @@ torockspec = (txt) ->
     fin ..= line .. "\n"
   return fin
 
+-- extract dependencies
+extractDeps = (dept) ->
+  clone          = {k, v for k, v in pairs dept}
+  clone.build    = nil
+  clone.external = nil
+  return clone
+
 -- start
 version = args.version
 print style "%{blue bold}rockbuild #{VERSION}"
@@ -103,7 +110,7 @@ package = {
   description: frame.description
   
   supported_platforms:   frame.platforms
-  dependencies:          frame.dependencies
+  dependencies:          extractDeps frame.dependencies
   build_dependencies:    frame.dependencies and frame.dependencies.build    or nil 
   external_dependencies: frame.dependencies and frame.dependencies.external or nil
 
