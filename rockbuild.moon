@@ -27,7 +27,8 @@ with argparse!
     \default "rock.yml"
   with \option "-d --dir", "rockspec output location"
     \default "rockspecs"
-  \flag   "--dry", "prints the resulting rockspec and does nothing else"
+  \flag   "--dry",         "prints the resulting rockspec and does nothing else"
+  \flag   "--delete",      "deletes the rockspec after using it"
   \option "-r --revision", "custom revision for the rockspec"
   \flag   "-m --make",     "runs 'luarocks make' after compiling the rockspec"
   \flag   "-t --tag",      "Adds a git tag after compiling the rockspec"
@@ -125,8 +126,13 @@ makeDir args.dir unless exists "#{args.dir}/"
 writefile path, torockspec result
 
 -- run post-compile things
+if args.delete
+  prefix "Deleting #{path}"
+  os.remove path
 if args.tag
   prefix "Making Git tag %{yellow}#{args.prefix}#{version}#{args.suffix}"
+  os.execute "git add -A"
+  os.execute "git commit -m 'Producing rockspec #{verrev}'"
   os.execute "git tag -a #{args.prefix}#{version}#{args.suffix}"
 if args.make
   prefix "Running 'luarocks make'"

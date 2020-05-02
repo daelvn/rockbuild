@@ -135,6 +135,8 @@ end
 writefile(path, torockspec(result))
 if args.tag then
   prefix("Making Git tag %{yellow}" .. tostring(args.prefix) .. tostring(version) .. tostring(args.suffix))
+  os.execute("git add -A")
+  os.execute("git commit -m 'Producing rockspec " .. tostring(verrev) .. "'")
   os.execute("git tag -a " .. tostring(args.prefix) .. tostring(version) .. tostring(args.suffix))
 end
 if args.make then
